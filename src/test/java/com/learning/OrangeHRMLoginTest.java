@@ -2,24 +2,20 @@
 package com.learning;
 
 // Import Selenium browser controls
+import java.time.Duration;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-
-// Import Selenium explicit wait tools
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-// Import Java Duration for setting the wait time
-import java.time.Duration;
-
-// Import TestNG test and assertion tools
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class OrangeHRMLoginTest {
 
+    //Invalid username
     @Test
     public void loginWithInvalidUsername(){
         
@@ -67,7 +63,144 @@ public class OrangeHRMLoginTest {
             driver.quit();
         }
     }
+    //Invalid Password
+    @Test 
+     public void loginWithInvalidPassword(){
 
+        WebDriver driver = new ChromeDriver();
+
+        driver.manage().window().maximize();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+
+        try {
+
+            driver.get("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
+
+            System.out.println("Page tittle: " + driver.getTitle());
+            System.out.println("Current URL: " + driver.getCurrentUrl());
+           WebElement usernameField = wait.until(
+            ExpectedConditions.visibilityOfElementLocated(
+                By.name("username"))
+            );
+
+            usernameField.sendKeys("Admin");
+            pause(2000);
+
+            WebElement passwordField = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                    By.name("password"))
+                );
+
+            passwordField.sendKeys("wrong123");
+            pause(2000);
+
+            WebElement loginButton = wait.until(
+                ExpectedConditions.elementToBeClickable(
+                    By.cssSelector("button[type='submit']"))
+                );
+            loginButton.click();
+
+            System.out.println("Login fail! Invalid password was rejected.");
+            pause(2000);
+
+            try{
+                Thread.sleep(1000);
+            }catch(InterruptedException e){
+                Thread.currentThread().interrupt();
+            }
+
+           
+
+
+        } finally{
+            driver.quit();
+        }
+
+
+     }
+
+     //Empty username
+     @Test
+     public void loginWithEmptyUsername(){
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.manage().window().maximize();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+
+        try{
+            driver.get("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
+
+            System.out.println("Current URL: "+ driver.getCurrentUrl());
+            System.out.println("Page title: "+ driver.getTitle());
+
+            WebElement usernameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("username")));
+            usernameField.sendKeys("   ");
+            pause(2000);
+
+            WebElement passwordField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("username")));
+            passwordField.sendKeys("admin123");
+            pause(1000);
+
+            WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
+            loginButton.click();
+
+            System.out.println("Login faild! username is empty");
+            pause(1000);
+
+            try{
+                Thread.sleep(1000);
+            }catch(InterruptedException e){
+                Thread.currentThread().interrupt();
+            }
+
+        }finally{
+            driver.quit();
+        }
+     }
+
+     //Empty password
+    @Test
+     public void loginWithEmptyPassword(){
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.manage().window().maximize();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+
+        try{
+            driver.get("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
+
+            System.out.println("Current URL: "+ driver.getCurrentUrl());
+            System.out.println("Page title: "+ driver.getTitle());
+
+            WebElement usernameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("username")));
+            usernameField.sendKeys("Admin");
+            pause(2000);
+
+            WebElement passwordField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("password")));
+            passwordField.sendKeys("  ");
+            pause(2000);
+
+            WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
+            loginButton.click();
+
+            System.out.println("Login failed! password is empty");
+
+            try{
+                Thread.sleep(1000);
+            }catch(InterruptedException e){
+                Thread.currentThread().interrupt();
+            }
+
+        }finally{
+            driver.quit();
+        }
+     }
+     //Valid username and password
     @Test
     public void loginToOrangeHRM() {
 
