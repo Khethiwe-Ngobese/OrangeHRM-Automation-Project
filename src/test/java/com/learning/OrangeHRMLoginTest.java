@@ -200,6 +200,45 @@ public class OrangeHRMLoginTest {
             driver.quit();
         }
      }
+
+     //Both username and password empty
+     @Test
+     public void loginWithEmptyUsernameAndPassword(){
+        WebDriver driver = new ChromeDriver();
+
+        driver.manage().window().maximize();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+
+        try{
+            driver.get("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
+
+            System.out.println("Current: URL "+ driver.getCurrentUrl());
+            System.out.println("Page title: "+driver.getTitle());
+
+            WebElement usernameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("username")));
+            usernameField.sendKeys(" ");
+            pause(2000);
+
+            WebElement passwordField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("password")));
+            passwordField.sendKeys("  ");
+            pause(2000);
+
+            WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
+            loginButton.click();
+
+            System.out.println("Login Failed! username and password is empty");
+
+            try{
+                Thread.sleep(1000);
+            }catch(InterruptedException e){
+                Thread.currentThread().interrupt();
+            }
+
+        }finally{
+            driver.quit();
+        }
+     }
      //Valid username and password
     @Test
     public void loginToOrangeHRM() {
